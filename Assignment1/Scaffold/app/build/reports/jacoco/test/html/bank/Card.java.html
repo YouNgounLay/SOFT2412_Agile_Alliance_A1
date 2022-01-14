@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Card.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">bank</a> &gt; <span class="el_source">Card.java</span></div><h1>Card.java</h1><pre class="source lang-java linenums">package bank;
+
+import java.time.LocalDate; 
+import java.time.LocalDateTime;
+import bank.Bank;
+
+public class Card {
+
+  private String name;
+  private double balance;
+  private int cardNumber;
+  private String pin;
+  private boolean status;
+  private boolean valid;
+  private LocalDate dateExpired;
+  private LocalDate dateIssued;
+
+<span class="fc" id="L18">  public Card(int cardNumber, String pin, String name) {</span>
+<span class="fc" id="L19">    this.cardNumber = cardNumber; </span>
+<span class="fc" id="L20">    this.pin = pin;</span>
+<span class="fc" id="L21">    this.dateIssued = LocalDateTime.now().toLocalDate();</span>
+<span class="fc" id="L22">    this.dateExpired = LocalDateTime.now().toLocalDate().plusYears(3); </span>
+<span class="fc" id="L23">    this.status = true;</span>
+<span class="fc" id="L24">    this.name = name;</span>
+<span class="fc" id="L25">    this.balance = 0;</span>
+<span class="fc" id="L26">  }</span>
+  
+  public int getNumber() {
+<span class="fc" id="L29">	  return this.cardNumber;</span>
+  }
+
+  public double getBalance() {
+<span class="fc" id="L33">    return this.balance;</span>
+  }
+
+  public boolean getStatus(){
+<span class="fc" id="L37">    return this.status;</span>
+  }
+
+  public void setStatus(boolean status) { 
+<span class="fc" id="L41">    this.status = status; </span>
+<span class="fc" id="L42">  }</span>
+
+  public String getPin() { 
+<span class="fc" id="L45">    return this.pin;</span>
+  }
+
+  public boolean checkExpiry(){
+<span class="fc" id="L49">    int monthNow = LocalDateTime.now().toLocalDate().getMonthValue();</span>
+<span class="fc" id="L50">    int yearNow = LocalDateTime.now().toLocalDate().getYear();</span>
+
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">    if(yearNow &lt; this.dateExpired.getYear()){</span>
+<span class="fc" id="L53">      return true;</span>
+    }
+<span class="nc bnc" id="L55" title="All 2 branches missed.">    else if(yearNow == this.dateExpired.getYear()){</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">      if(monthNow &lt; this.dateExpired.getMonthValue()){</span>
+<span class="nc" id="L57">        return true;</span>
+      }
+    }
+    else{
+<span class="nc" id="L61">      return false;</span>
+    }
+<span class="nc" id="L63">    return false;</span>
+  }
+
+  public boolean checkExpiryFutureTime(){
+<span class="fc" id="L67">    int monthNow = LocalDateTime.now().toLocalDate().getMonthValue();</span>
+<span class="fc" id="L68">    int yearNow = LocalDateTime.now().toLocalDate().plusYears(4).getYear();</span>
+
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">    if(yearNow &lt; this.dateExpired.getYear()){</span>
+<span class="nc" id="L71">      return true;</span>
+    }
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">    else if(yearNow == this.dateExpired.getYear()){</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">      if(monthNow &lt; this.dateExpired.getMonthValue()){</span>
+<span class="nc" id="L75">        return true;</span>
+      }
+    }
+    else{
+<span class="fc" id="L79">      return false;</span>
+    }
+<span class="nc" id="L81">    return false;</span>
+  }
+
+  public boolean checkIssueDate(){
+<span class="fc" id="L85">    int monthNow = LocalDateTime.now().toLocalDate().getMonthValue();</span>
+<span class="fc" id="L86">    int yearNow = LocalDateTime.now().toLocalDate().getYear();</span>
+
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if(yearNow &gt; this.dateIssued.getYear()){</span>
+<span class="nc" id="L89">      return true;</span>
+    }
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    else if(yearNow == this.dateIssued.getYear()){</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">      if(monthNow &lt;= this.dateExpired.getMonthValue()){</span>
+<span class="fc" id="L93">        return true;</span>
+      }
+    } else{
+<span class="nc" id="L96">      return false;</span>
+    }
+<span class="nc" id="L98">    return false;</span>
+  }
+
+  public boolean checkIssueDatePastTime(){
+<span class="fc" id="L102">    int monthNow = LocalDateTime.now().toLocalDate().getMonthValue();</span>
+<span class="fc" id="L103">    int yearNow = LocalDateTime.now().toLocalDate().minusYears(1).getYear();</span>
+
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">    if(yearNow &gt; this.dateIssued.getYear()){</span>
+<span class="nc" id="L106">      return true;</span>
+    }
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">    else if(yearNow == this.dateIssued.getYear()){</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">      if(monthNow &lt;= this.dateExpired.getMonthValue()){</span>
+<span class="nc" id="L110">        return true;</span>
+      }
+    } else{
+<span class="fc" id="L113">      return false;</span>
+    }
+<span class="nc" id="L115">    return false;</span>
+  }
+
+  public boolean withdraw(double amount) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">    if (this.balance &lt; amount){</span>
+<span class="fc" id="L120">      return false;</span>
+    }
+<span class="fc" id="L122">    this.balance -= amount;</span>
+<span class="fc" id="L123">    return true;</span>
+  }
+
+  public boolean deposit(double amount) {
+<span class="fc" id="L127">    this.balance += amount;</span>
+<span class="fc" id="L128">    return true;</span>
+  }
+  
+  public boolean isValid(){
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">    if(this.getStatus() == true){</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">      if(this.checkExpiry() == true){</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if(this.checkIssueDate() == true){</span>
+<span class="fc" id="L135">          this.valid = true;</span>
+<span class="fc" id="L136">          return this.valid;</span>
+        }
+      }
+    }
+<span class="nc" id="L140">    this.valid = false;</span>
+<span class="nc" id="L141">    return this.valid;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

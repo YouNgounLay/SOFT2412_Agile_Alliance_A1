@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CardVerificationState.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">bank.UI.InputState</a> &gt; <span class="el_source">CardVerificationState.java</span></div><h1>CardVerificationState.java</h1><pre class="source lang-java linenums">package bank.UI.InputState;  
+
+import bank.ATM;
+import bank.Bank;
+import bank.UI.TextColor; 
+import bank.UI.InputState.UserInputState;
+import bank.UI.UserInputHandler;
+import bank.UI.InputState.DefaultState;
+
+import java.util.Scanner; 
+
+public class CardVerificationState implements UserInputState {
+<span class="nc" id="L13">    private final String displayMessage = TextColor.blue + &quot;\n\n\nAGILE ALLIANCE ATM\n&quot; + TextColor.reset  </span>
+                                        + TextColor.green + &quot;\nPlease Choose One of the Following Action: &quot; + TextColor.reset + &quot;\n&quot;
+                                        + &quot;1. Enter Card Number&quot; + &quot;\n&quot;
+                                        + &quot;2. Go Back&quot;;
+
+<span class="nc" id="L18">    private final Scanner scan = new Scanner(System.in); </span>
+    private Bank bank; 
+    private ATM atm;
+    private UserInputHandler inputHandler; 
+    
+<span class="nc" id="L23">    public CardVerificationState(UserInputHandler inputHandler, Bank bank, ATM atm) {</span>
+<span class="nc" id="L24">        this.inputHandler = inputHandler; </span>
+<span class="nc" id="L25">        this.bank = bank; </span>
+<span class="nc" id="L26">        this.atm = atm;</span>
+<span class="nc" id="L27">    }</span>
+    
+    @Override 
+    public void display() { 
+<span class="nc" id="L31">        System.out.print(displayMessage);</span>
+<span class="nc" id="L32">    }</span>
+    
+    @Override 
+    public boolean askForInput() {
+<span class="nc" id="L36">        this.display();</span>
+<span class="nc" id="L37">        String text = scan.nextLine();</span>
+        
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (!this.isNumeric(text)) {</span>
+<span class="nc" id="L40">            System.out.println(&quot;\nPlease Enter a Number!&quot;); </span>
+<span class="nc" id="L41">            return true; </span>
+        } 
+<span class="nc" id="L43">        int option = Integer.parseInt(text);  </span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (option == 2) { </span>
+<span class="nc" id="L45">            this.inputHandler.setState(new DefaultState(inputHandler, bank, atm));  </span>
+<span class="nc" id="L46">            return true; </span>
+        }
+        
+<span class="nc" id="L49">        System.out.print(&quot;\n\n\nPlease Enter a Card Number: &quot;);</span>
+<span class="nc" id="L50">        text = scan.nextLine();</span>
+        
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!this.isNumeric(text)) {</span>
+<span class="nc" id="L53">            System.out.println(&quot;\nPlease Enter a Number!&quot;); </span>
+<span class="nc" id="L54">            return true; </span>
+        } 
+<span class="nc" id="L56">        int cardNumber = Integer.parseInt(text); </span>
+<span class="nc" id="L57">        boolean success = atm.insertCard(cardNumber); </span>
+        
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (!success) { </span>
+<span class="nc" id="L60">            return true;</span>
+        }
+        
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (!atm.checkStatus()) {</span>
+<span class="nc" id="L64">            atm.ejectCard();</span>
+<span class="nc" id="L65">            System.out.println(TextColor.red + &quot;\n\nEjecting Card&quot; + TextColor.reset);</span>
+<span class="nc" id="L66">            return true;</span>
+        }
+        
+<span class="nc" id="L69">        int count = 0; </span>
+        do { 
+<span class="nc" id="L71">            System.out.print(&quot;\n\n\nPlease Insert Pin: &quot;); </span>
+<span class="nc" id="L72">            text = scan.nextLine();</span>
+<span class="nc" id="L73">            count ++; </span>
+            
+            
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (atm.enterPin(text)) </span>
+<span class="nc" id="L77">                break;</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        } while (count &lt; 3); </span>
+        
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (count &gt;= 3) {  </span>
+<span class="nc" id="L81">            System.out.println(TextColor.red + &quot;\n\nThe System Only Allowed 3 Attempts!&quot;); </span>
+<span class="nc" id="L82">            System.out.println(&quot;Ejecting Card!&quot; + TextColor.reset);</span>
+<span class="nc" id="L83">            atm.ejectCard();</span>
+<span class="nc" id="L84">            return true; </span>
+        }
+        
+<span class="nc" id="L87">        this.inputHandler.setState(new TransactionState(inputHandler, bank, atm));</span>
+<span class="nc" id="L88">        return true;    </span>
+    }
+
+    private boolean isNumeric(String text) {  
+        try { 
+<span class="nc" id="L93">            int input = Integer.parseInt(text);</span>
+<span class="nc" id="L94">            return true;</span>
+<span class="nc" id="L95">        } catch (NumberFormatException e) { </span>
+<span class="nc" id="L96">            return false;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

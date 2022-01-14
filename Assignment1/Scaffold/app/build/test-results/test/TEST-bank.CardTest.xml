@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="bank.CardTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-09-20T11:48:44" hostname="Unknown.gateway" time="0.013">
+  <properties/>
+  <testcase name="testCheckExpiryCardExpired()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testCheckExpiry()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testWithdraw()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testGetBalance()" classname="bank.CardTest" time="0.0"/>
+  <testcase name="testCheckIssueDateCardNotCreatedYet()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testCheckIssueDate()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testDeposit()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testGetNumber()" classname="bank.CardTest" time="0.0"/>
+  <testcase name="testGetPin()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testGetStatus()" classname="bank.CardTest" time="0.001"/>
+  <testcase name="testIsValid()" classname="bank.CardTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ATM.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">bank</a> &gt; <span class="el_source">ATM.java</span></div><h1>ATM.java</h1><pre class="source lang-java linenums">package bank;
+
+import bank.Bank;
+import bank.Card; 
+
+
+import java.util.List; 
+import java.util.ArrayList;
+
+
+public class ATM {
+	//private List&lt;Card&gt; cardList; //maybe take out
+	private Card currentCard;
+	private double availableFunds;
+	private int transactionsCount;
+	private List&lt;Card&gt; confiscatedCards;
+	private Bank bank;
+
+<span class="fc" id="L19">	public ATM(Bank bank) {</span>
+<span class="fc" id="L20">		this.bank = bank;</span>
+<span class="fc" id="L21">		this.confiscatedCards = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L22">		this.availableFunds = 0;</span>
+<span class="fc" id="L23">		this.currentCard = null;</span>
+<span class="fc" id="L24">		this.transactionsCount = 0;</span>
+<span class="fc" id="L25">	}</span>
+
+	public void addFunds(double funds) {
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">		if (funds &lt; 0) {</span>
+<span class="nc" id="L29">			System.out.println(&quot;The ATM only accepts valid values. Please try again.&quot;);</span>
+<span class="nc" id="L30">			return;</span>
+		}
+<span class="fc" id="L32">		this.availableFunds += funds;</span>
+<span class="fc" id="L33">		return;</span>
+	}
+	
+	public double getFunds() { 
+<span class="fc" id="L37">		return this.availableFunds;</span>
+	}
+	
+	public Card getCurrentCard() { 
+<span class="fc" id="L41">		return this.currentCard;</span>
+	}
+
+	public List&lt;Card&gt; getConfiscatedCards() { 
+<span class="fc" id="L45">		return this.confiscatedCards;</span>
+	}
+
+	public boolean insertCard(int cardNumber) {
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">		if (cardNumber == 0) {</span>
+<span class="nc" id="L51">			System.out.println(&quot;The card number you've entered is invalid. Please enter a valid card number.&quot;);</span>
+<span class="nc" id="L52">			return false;</span>
+		}
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		for (Card c : this.bank.getCardList()) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">			if (c.getNumber() == cardNumber) {</span>
+<span class="fc" id="L57">				currentCard = c;</span>
+			}
+<span class="fc" id="L59">		}</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if (currentCard == null) {</span>
+<span class="fc" id="L62">			System.out.println(&quot;\n\nThe card number you've entered is invalid. Please enter a valid card number.&quot;);</span>
+<span class="fc" id="L63">			return false;</span>
+		} 
+<span class="fc" id="L65">		return true;</span>
+	}
+
+	public boolean checkStatus() {
+		/* Card class needs to have a separate status check method */
+<span class="fc" id="L70">		boolean status = currentCard.getStatus();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		if (!status) {</span>
+<span class="fc" id="L72">			this.confiscatedCards.add(this.currentCard);</span>
+<span class="fc" id="L73">			System.out.println(&quot;Sorry, it seems like there is a problem with your card. We will hold onto your card for now until you contact someone from our bank. We apologise for the inconvenience.&quot;);</span>
+<span class="fc" id="L74">			return false;</span>
+		}
+<span class="nc" id="L76">		return true;</span>
+	}
+
+	public boolean enterPin(String pin) {
+<span class="fc" id="L80">		boolean success = (pin.equals(currentCard.getPin()));</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if (!success){</span>
+<span class="fc" id="L82">			System.out.print(&quot;Incorrect pin. Please enter the correct pin.&quot;);</span>
+		}
+<span class="fc" id="L84">		return success;</span>
+	}
+
+
+	public boolean deposit(int amount) {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		if (this.currentCard == null) {</span>
+<span class="fc" id="L90">			return false;</span>
+		}
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		if (amount % 5 != 0) {</span>
+<span class="nc" id="L93">			System.out.println(&quot;The ATM only accepts Australian notes. No coins will be accepted. Please enter a suitable amount to deposit in cash only.&quot;);</span>
+<span class="nc" id="L94">			return false;</span>
+		}
+<span class="fc" id="L96">		this.currentCard.deposit(amount);</span>
+<span class="fc" id="L97">		this.transactionsCount += 1;</span>
+<span class="fc" id="L98">		this.availableFunds += amount;</span>
+<span class="fc" id="L99">		this.printReceipt(&quot;Deposit&quot;, amount);</span>
+<span class="fc" id="L100">		return true;</span>
+	}
+
+	public boolean withdraw(double amount) {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		if (this.currentCard == null) {</span>
+<span class="fc" id="L105">			return false;</span>
+		}
+<span class="fc bfc" id="L107" title="All 2 branches covered.">		if (this.availableFunds &lt; amount) {</span>
+<span class="fc" id="L108">			System.out.println(&quot;ERROR: There are insufficient funds in the ATM. Your transaction has been cancelled. We apologise for the inconvenience.&quot;);</span>
+<span class="fc" id="L109">			return false;</span>
+		}
+        /* for this to work Account withdraw() must have a boolean return type.
+        I haven't included any error/success messages, in case Account/System wants to handle that.
+         */
+<span class="fc" id="L114">		boolean successful = this.currentCard.withdraw(amount);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">		if (successful) {</span>
+<span class="fc" id="L116">			this.availableFunds = this.availableFunds - amount;</span>
+<span class="fc" id="L117">			this.transactionsCount += 1;</span>
+<span class="fc" id="L118">			this.printReceipt(&quot;Withdraw&quot;, amount);</span>
+<span class="fc" id="L119">			return true;</span>
+		}
+
+		else{
+<span class="fc" id="L123">			System.out.println(&quot;ERROR: There are insufficient funds in your account. Your transaction has been cancelled.&quot;);</span>
+<span class="fc" id="L124">			return false;</span>
+		}
+
+
+	}
+
+	public double checkBalance() {
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">		if (this.currentCard == null) </span>
+<span class="fc" id="L132">			return -1;</span>
+<span class="nc" id="L133">		return this.currentCard.getBalance();</span>
+	}
+
+	public String printReceipt(String transactionType, double amount) {
+
+<span class="fc" id="L138">		String message = &quot;&quot;;</span>
+<span class="fc" id="L139">		String transactionMessage = &quot;&quot;;</span>
+<span class="fc" id="L140">		int cardNumber = this.currentCard.getNumber();</span>
+		//int transactionNumber = transactions.size();
+<span class="fc" id="L142">		double accountBalance = this.currentCard.getBalance();</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">		if (transactionType == &quot;Deposit&quot;) {</span>
+<span class="fc" id="L145">			message = &quot;Transaction number &quot; + transactionsCount + &quot;: Successfully deposited $&quot; + amount + &quot; into you account. Current account balance is $&quot; +accountBalance;</span>
+<span class="fc" id="L146">			transactionMessage = &quot;TN &quot; + transactionsCount + &quot;: +$&quot; + amount + &quot; into card &quot; + cardNumber;</span>
+		} else {
+<span class="fc" id="L148">			message = &quot;Transaction number &quot; + transactionsCount + &quot;: Successfully withdrawn $&quot; + amount + &quot; from your account. Current account balance is $&quot; +accountBalance;</span>
+<span class="fc" id="L149">			transactionMessage = &quot;TN &quot; + transactionsCount + &quot;: -$&quot; + amount + &quot; from card &quot; + cardNumber;</span>
+		}
+<span class="fc" id="L151">		return message;</span>
+	}
+
+	public void ejectCard() {
+<span class="fc" id="L155">		this.currentCard = null;</span>
+<span class="fc" id="L156">	}</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

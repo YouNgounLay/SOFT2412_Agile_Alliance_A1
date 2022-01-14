@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="bank.ATMTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2021-09-20T11:48:44" hostname="Unknown.gateway" time="0.068">
+  <properties/>
+  <testcase name="testStatusCheck()" classname="bank.ATMTest" time="0.007"/>
+  <testcase name="testATMFunctions()" classname="bank.ATMTest" time="0.042"/>
+  <testcase name="testCurrentCard()" classname="bank.ATMTest" time="0.009"/>
+  <testcase name="testInsertCard()" classname="bank.ATMTest" time="0.001"/>
+  <testcase name="testInsertPin()" classname="bank.ATMTest" time="0.001"/>
+  <testcase name="testCheckBalance()" classname="bank.ATMTest" time="0.0"/>
+  <testcase name="ATMFunds()" classname="bank.ATMTest" time="0.001"/>
+  <testcase name="testCheckAndAddFunds()" classname="bank.ATMTest" time="0.001"/>
+  <system-out><![CDATA[Sorry, it seems like there is a problem with your card. We will hold onto your card for now until you contact someone from our bank. We apologise for the inconvenience.
+ERROR: There are insufficient funds in your account. Your transaction has been cancelled.
+
+
+The card number you've entered is invalid. Please enter a valid card number.
+Incorrect pin. Please enter the correct pin.ERROR: There are insufficient funds in the ATM. Your transaction has been cancelled. We apologise for the inconvenience.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
